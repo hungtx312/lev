@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}
+    Đăng kí
+{% endblock %}
+{% block content %}
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-info">
+            <div class="container">
+                <a class="navbar-brand font-weight-bolder" href="#">Lev</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#my-menu"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="my-menu">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item  font-weight-bold">
+                            <a class="nav-link " href="{% url "ui:home" %}">
+                                Giới thiệu
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="ml-5 mt-5">
+            <form id="my-form" style="width: 400px">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="emailHelp"
+                           placeholder="Nhập tên tài khoản">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
+                </div>
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#my-form').on('submit', function (e) {
+                e.preventDefault();
+                var username = $('#username').val();
+                var password = $('#password').val();
+                $.ajax({
+                    url: '{% url "api:signup_" %}',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        user: username,
+                        pass: password,
+                    }),
+                    headers: {
+                        "X-CSRFToken": $('input[name="csrfmiddlewaretoken"]').val()
+                    }
+                });
+                return false;
+            })
+
+        })
+    </script>
+
+{% endblock %}
